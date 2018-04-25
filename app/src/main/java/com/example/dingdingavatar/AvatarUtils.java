@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 
 import java.util.List;
 
@@ -35,7 +37,11 @@ public class AvatarUtils {
 
         Path mPath = new Path();
         mPath.addCircle(width/2, height/2, width/2, Path.Direction.CCW);
-        canvas.clipPath(mPath); //切割画布
+        //canvas.clipPath(mPath); //切割画布
+
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        canvas.drawPath(mPath, paint);
 
         final int listSize = list.size();
         switch (listSize) {
@@ -114,10 +120,14 @@ public class AvatarUtils {
         int x, y, width, height;
         int dstWidth, dstHeight;
 
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+
         if(mode==WHOLE) {
             // 比例缩放
             Bitmap bmp = Bitmap.createScaledBitmap(bitmap, mWidth, mHeight, false);
-            canvas.drawBitmap(bmp, 0, 0, null);
+            canvas.drawBitmap(bmp, 0, 0, paint);
         }else if(mode==LEFT){
             dstWidth = mWidth;
             dstHeight = mHeight;
@@ -135,7 +145,7 @@ public class AvatarUtils {
             // 裁取中间部分(从x点裁取置顶距离)
             Bitmap dstBmp = Bitmap.createBitmap(bmp, x, y, width,  height);
             // 绘图
-            canvas.drawBitmap(dstBmp, left, top, null);
+            canvas.drawBitmap(dstBmp, left, top, paint);
         }else if(mode==RIGHT){
             dstWidth = mWidth;
             dstHeight = mHeight;
@@ -153,7 +163,7 @@ public class AvatarUtils {
             // 裁取中间部分(从x点裁取置顶距离)
             Bitmap dstBmp = Bitmap.createBitmap(bmp, x, y, width,  height);
             // 绘图
-            canvas.drawBitmap(dstBmp, left, top, null);
+            canvas.drawBitmap(dstBmp, left, top, paint);
         }else if(mode==LEFT_TOP){
             dstWidth = mWidth/2 - marginWhiteWidth / 2;
             dstHeight = mHeight/2 - marginWhiteWidth / 2;
@@ -164,7 +174,7 @@ public class AvatarUtils {
             // 比例缩放
             Bitmap bmp = Bitmap.createScaledBitmap(bitmap, dstWidth, dstHeight, false);
             // 绘图
-            canvas.drawBitmap(bmp, left, top, null);
+            canvas.drawBitmap(bmp, left, top, paint);
         }else if(mode==LEFT_BOTTOM){
             dstWidth = mWidth/2 - marginWhiteWidth / 2;
             dstHeight = mHeight/2 - marginWhiteWidth / 2;
@@ -175,7 +185,7 @@ public class AvatarUtils {
             // 比例缩放
             Bitmap bmp = Bitmap.createScaledBitmap(bitmap, dstWidth, dstHeight, false);
             // 绘图
-            canvas.drawBitmap(bmp, left, top, null);
+            canvas.drawBitmap(bmp, left, top, paint);
         }else if(mode==RIGHT_TOP){
             dstWidth = mWidth/2 - marginWhiteWidth / 2;
             dstHeight = mHeight/2 - marginWhiteWidth / 2;
@@ -186,7 +196,7 @@ public class AvatarUtils {
             // 比例缩放
             Bitmap bmp = Bitmap.createScaledBitmap(bitmap, dstWidth, dstHeight, false);
             // 绘图
-            canvas.drawBitmap(bmp, left, top, null);
+            canvas.drawBitmap(bmp, left, top, paint);
         }else if(mode==RIGHT_BOTTOM){
             dstWidth = mWidth/2 - marginWhiteWidth / 2;
             dstHeight = mHeight/2 - marginWhiteWidth / 2;
@@ -197,7 +207,7 @@ public class AvatarUtils {
             // 比例缩放
             Bitmap bmp = Bitmap.createScaledBitmap(bitmap, dstWidth, dstHeight, false);
             // 绘图
-            canvas.drawBitmap(bmp, left, top, null);
+            canvas.drawBitmap(bmp, left, top, paint);
         }
     }
 
@@ -208,6 +218,7 @@ public class AvatarUtils {
 
         Paint textBgPaint = new Paint();
         textBgPaint.setColor(Color.parseColor(bgColer));
+        textBgPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         if(mode==WHOLE){
             bgLeft = 0;
             bgTop = 0;
